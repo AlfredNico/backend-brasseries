@@ -1,0 +1,8 @@
+php artisan migrate:reset
+php artisan db:wipe
+php artisan migrate
+php artisan serve
+php artisan route:list
+
+FACTORY: php artisan make:factory ProductsFactory
+SEEDER: php artisan db:seed
