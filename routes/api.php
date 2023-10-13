@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +17,28 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
+Route::controller(AuthController::class)->group(function () {
+    Route::post('sign-in', 'signIn');
+    Route::post('sign-up', 'signUp');
+    Route::post('sign-out', 'signOut');
+});
 
-Route::apiResource("users", UserController::class);
+// Route::prefix('v1/persons')
+// Route::group(['prefix'=>'/v1', 'middleware' => ['auth:sanctum']], function () {
+//     Route::apiResource("users", UserController::class);
+// });
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource("users", UserController::class);
+});
+
+Route::get('list', [UserController::class, 'index']);
+
+Route::fallback(function (){
+    abort(404, 'API resource not found');
+});
+
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

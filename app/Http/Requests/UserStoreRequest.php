@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 
 
 class UserStoreRequest extends FormRequest
@@ -53,7 +54,7 @@ class UserStoreRequest extends FormRequest
             'success'   => false,
             'message'   => 'Validation errors',
             'data'      => $validator->errors()
-        ]));
+        ], Response::HTTP_NOT_ACCEPTABLE));
     }
 
 }

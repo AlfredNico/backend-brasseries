@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
+// use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -18,6 +22,7 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
     /**
      * Register the exception handling callbacks for the application.
      */
@@ -25,12 +30,15 @@ class Handler extends ExceptionHandler
     {
         // $this->reportable(function (Throwable $e) {
         $this->renderable(function (NotFoundHttpException $e, $request) {
-            // On retourne une réponse 404 avec un message en JSON
-            if ($request->is("api/*")) {
+            if ($request->is('api/*')) {
                 return response()->json([
-                    "message" => "Ressource introuvable"
+                    'success' => false,
+                    'message' => 'Resource not found.',
+                    'data' => null
                 ], 404);
             }
+            return parent::render($request, $exception);
         });
     }
+
 }
