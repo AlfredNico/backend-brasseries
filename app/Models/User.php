@@ -77,7 +77,7 @@ class User extends Authenticatable
             'expires_at' => $date
         ]);
 
-        // return new NewAccessToken($token, $token->getKey().'.'.$plainTextToken);
+        // return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
         return new NewAccessToken($token, $plainTextToken);
     }
 }

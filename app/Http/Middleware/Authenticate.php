@@ -22,9 +22,9 @@ class Authenticate extends Middleware
         if(request()->hasHeader('Authorization') || $request->is('api/*')){
             abort(response()->json(
                 [
-                    'status' => 'Error',
+                    'success' => false,
                     'message' => 'Unauthenticated',
-                    'data' => []
+                    'data' => null
                 ], 401));
         }
     }

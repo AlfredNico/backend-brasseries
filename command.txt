@@ -6,4 +6,5 @@ php artisan route:list
 
 FACTORY: php artisan make:factory ProductsFactory
 SEEDER: php artisan db:seed
- php artisan make:controller RestAPIBaseController --resource
+php artisan make:controller php artisan make:controller API\\v1\\DepartementController --resource
+php artisan l5-swagger:generate

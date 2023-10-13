@@ -7,47 +7,29 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-
-class UserStoreRequest extends FormRequest
+abstract class BaseAPIRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool {
+    public function authorize(): bool
+    {
         return true;
     }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    // abstract public function authorize(): bool;
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
-    {
-        $user_id = $this->user->ids ?? null;
 
-        return [
-            'name' => 'required|string|max:50',
-            'username' => 'required|unique:users',
-            'is_activated' => 'boolean',
-            'password' => 'required'
-        ];
-    }
+    abstract  public function rules(): array;
 
-
-    /**
-     * Custom message for validation
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'name.required' => 'Name is required!',
-            'username.required' => 'Username is required!',
-            'password.required' => 'Password is required!'
-        ];
-    }
 
 
     public function failedValidation(Validator $validator) {
@@ -57,5 +39,4 @@ class UserStoreRequest extends FormRequest
             'data'      => $validator->errors()
         ], Response::HTTP_NOT_ACCEPTABLE));
     }
-
 }
