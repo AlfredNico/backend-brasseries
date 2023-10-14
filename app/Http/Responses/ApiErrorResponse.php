@@ -27,7 +27,7 @@ class ApiErrorResponse implements Responsable {
                 'data'    => [
                     'file'    => $this->exception->getFile(),
                     'line'    => $this->exception->getLine(),
-                    'trace'   => $this->exception->getTraceAsString()
+                    // 'trace'   => $this->exception->getTraceAsString()
                 ]
             ];
         }

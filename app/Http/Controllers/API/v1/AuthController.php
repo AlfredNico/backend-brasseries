@@ -65,7 +65,7 @@ class AuthController extends Controller {
         } catch (\Throwable $th) {
             return new ApiErrorResponse(
                 $th,
-                'An error occurred while trying to create the user'
+                'An error occurred while trying to create the user.'
             );
         }
     }
@@ -101,18 +101,19 @@ class AuthController extends Controller {
         try {
             $user = User::where('username', $rq['username'])->first();
             if (!$user || !Hash::check($rq['password'], $user->passwd)) {
-                return response([
-                    'msg' => 'incorrect username or password'
-                ], 401);
+                return new ApiSuccessResponse(
+                    $res,
+                    401,
+                    'Incorrect username or password.',
+                    false
+                );
             }
 
-            // $token = $user->createToken('apiToken')->plainTextToken;
-            // $token = $user->createToken('apiToken')->accessToken;
             $token = $user->createToken(
                 $user->name.'_'.Carbon::now(),
                 ['*'],
                 $rq['remember_me'] == true ? Carbon::now()->addDay(30) : Carbon::now()->addMinute(1)
-            )->plainTextToken;
+            )->plainTextToken; /* accessToken */
 
             $res = [
                 'user' => $user,
@@ -125,7 +126,7 @@ class AuthController extends Controller {
         } catch (\Throwable $th) {
             return new ApiErrorResponse(
                 $th,
-                'An error occurred while trying to login an user'
+                'An error occurred while trying to login an user.'
             );
         }
     }
@@ -184,7 +185,7 @@ class AuthController extends Controller {
         } catch (\Throwable $th) {
             return new ApiErrorResponse(
                 $th,
-                'An error occurred while trying to logout an user'
+                'An error occurred while trying to logout an user.'
             );
         }
     }
@@ -206,7 +207,7 @@ class AuthController extends Controller {
         } catch (\Throwable $th) {
             return new ApiErrorResponse(
                 $th,
-                'An error occurred while trying to refresh token'
+                'An error occurred while trying to refresh token.'
             );
         }
     }
