@@ -37,7 +37,7 @@ class Handler extends ExceptionHandler
                     'data' => null
                 ], 404);
             }
-            return parent::render($request, $exception);
+            return parent::render($request, $e);
         });
     }
 

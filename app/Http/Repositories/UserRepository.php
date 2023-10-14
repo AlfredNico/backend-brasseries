@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Repositories;
+namespace App\Http\Repositories;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserRepository extends Controller
+class UserRepository
 {
     //
 }
