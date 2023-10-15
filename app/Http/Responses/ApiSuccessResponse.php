@@ -4,6 +4,8 @@ namespace App\Http\Responses;
 
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+
 
 class ApiSuccessResponse implements Responsable {
     /**
@@ -23,7 +25,7 @@ class ApiSuccessResponse implements Responsable {
      * @param  $request
      * @return \Symfony\Component\HttpFoundation\Response|void
      */
-    public function toResponse($request) {
+    public function toResponse($request): JsonResponse {
         return response()->json([
             'success' =>  $this->success,
             'message' => $this->message,

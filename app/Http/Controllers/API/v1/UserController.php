@@ -9,6 +9,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller {
 
@@ -30,7 +31,7 @@ class UserController extends Controller {
      *       )
      *  )
      */
-    public function index() {
+    public function index()  {
         try {
             $users = User::all();
             return new ApiSuccessResponse(

@@ -4,6 +4,7 @@ namespace App\Http\Responses;
 
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class ApiErrorResponse implements Responsable {
@@ -18,7 +19,7 @@ class ApiErrorResponse implements Responsable {
      * @param  $request
      * @return \Symfony\Component\HttpFoundation\Response|void
      */
-    public function toResponse($request) {
+    public function toResponse($request): JsonResponse {
         $response = ['message' => $this->message];
         if (! is_null($this->exception) && config('app.debug')) {
             $response = [
