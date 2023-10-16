@@ -38,8 +38,8 @@ use Illuminate\Routing\Controller as BaseController;
  *      scheme="bearer",
  * )
  * @OA\Tag(
- *     name="BRASSERIES",
- *     description="API Endpoints of Brasseries - CAMEROUN"
+ *     name="#_API_Endpoints",
+ *     description="Brasseries - CAMEROUN"
  * )
 */
 class Controller extends BaseController {

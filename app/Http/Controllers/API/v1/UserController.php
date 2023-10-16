@@ -10,8 +10,15 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use App\Repositories\UserRepository;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
+
+    private UserRepository $suerRepo;
+    public function __construct(UserRepository $suerRepo = null) {
+        $this->suerRepo = $suerRepo;
+    }
 
     /**
      * @OA\Get(
@@ -33,9 +40,8 @@ class UserController extends Controller {
      */
     public function index()  {
         try {
-            $users = User::all();
             return new ApiSuccessResponse(
-                $users,
+                $this->suerRepo->getAll(),
                 Response::HTTP_OK
             );
         } catch (\Throwable $th) {
@@ -73,19 +79,10 @@ class UserController extends Controller {
      *       )
      *  )
      */
-    public function store(UserStoreRequest $request) {
+    public function store(UserStoreRequest $rq) {
         try {
-            $user = User::create([
-                'name' => $request->name,
-                'username' => $request->username,
-                'passwd' => bcrypt($request->password),
-                'is_activated' => isset($request->is_activated) ? $request->is_activated : false,
-                'cle_user' => isset($request->cle_user) ? $request->cle_user : null,
-                'departement_id' => isset($request->departement_id) ? $request->departement_id : null,
-                'usertype_id' => isset($request->usertype_id) ? $request->usertype_id : null,
-            ]);
             return new ApiSuccessResponse(
-                $user,
+                $this->suerRepo->create($rq),
                 Response::HTTP_CREATED
             );
         } catch (Throwable $ex) {

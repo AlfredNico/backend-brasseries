@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-abstract class BaseAPIRequest extends FormRequest
+abstract class __BaseAPIRequest extends FormRequest
 {
 
     /**
@@ -37,6 +37,6 @@ abstract class BaseAPIRequest extends FormRequest
             'success'   => false,
             'message'   => 'Validation errors',
             'data'      => $validator->errors()
-        ], Response::HTTP_NOT_ACCEPTABLE));
+        ], Response::HTTP_UNPROCESSABLE_ENTITY)); /* ], Response::HTTP_NOT_ACCEPTABLE)); */
     }
 }

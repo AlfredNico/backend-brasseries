@@ -15,8 +15,8 @@ return new class extends Migration
             $table->increments("ids");
             $table->string("name");
 
-            $table->integer('site_id')->unsigned();
-            $table->foreign('site_id')->references('ids')->on('departements')->cascadeOnDelete();
+            $table->integer('site_id')->nullable()->unsigned();
+            $table->foreign('site_id')->references('ids')->on('sites')->cascadeOnDelete();
         });
     }
 

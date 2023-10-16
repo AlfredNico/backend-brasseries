@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\NewAccessToken;
-
+use Carbon\Carbon;
 
 
 class User extends Authenticatable
@@ -33,6 +33,29 @@ class User extends Authenticatable
         'usertype_id',
     ];
 
+    protected $maps  = [
+        'name' => 'nm',
+        'username' => 'usr',
+        'is_activated' => 'is_act',
+        'cle_user' => 'cle_usr',
+        'dates' => 'dt',
+        'created_at' => 'dt_crt',
+        'updated_at' => 'dt_upd',
+        'departement_id' => 'dp_id',
+        'usertype_id' => 'usr_t_id',
+    ];
+    protected $appends = [
+        'nm',
+        'usr',
+        'is_act',
+        'cle_usr',
+        'dt',
+        'dt_crt',
+        'dt_upd',
+        'dp_id',
+        'usr_t_id',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -40,7 +63,15 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'passwd',
-        // 'remember_token',
+        'name',
+        'username',
+        'is_activated',
+        'cle_user',
+        'departement_id',
+        'usertype_id',
+        'created_at',
+        'updated_at',
+        'dates'
     ];
 
     /**
@@ -65,10 +96,11 @@ class User extends Authenticatable
      * Create a new personal access token for the user.
      *
      * @param  string  $name
-     * @param  array  $abilities
+     * @param  array   $abilities
+     * @param  Carbon  $date
      * @return \Laravel\Sanctum\NewAccessToken
      */
-    public function createToken(string $name, array $abilities = ['*'], $date)
+    public function createToken(string $name, array $abilities = ['*'], Carbon $date = null)
     {
         $token = $this->tokens()->create([
             'name' => $name,
@@ -79,5 +111,39 @@ class User extends Authenticatable
 
         // return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
         return new NewAccessToken($token, $plainTextToken);
+    }
+
+
+
+
+
+
+    public function getNmAttribute() {
+        return $this->attributes['name'];
+    }
+    public function getUsrAttribute() {
+        return $this->attributes['username'];
+    }
+    public function getIsActAttribute() {
+        return $this->attributes['is_activated'];
+    }
+    public function getCleUsrAttribute() {
+        return $this->attributes['cle_user'];
+    }
+    public function getDtAttribute() {
+        return $this->attributes['dates'];
+    }
+    public function getDtCrtAttribute() {
+        return $this->attributes['created_at'];
+    }
+    public function getdtUpdAttribute() {
+        return $this->attributes['updated_at'];
+    }
+
+    public function getDpIDAttribute() {
+        return $this->attributes['departement_id'];
+    }
+    public function getUsrTIdAttribute() {
+        return $this->attributes['usertype_id'];
     }
 }

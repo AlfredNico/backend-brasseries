@@ -1,10 +1,12 @@
-php artisan migrate:reset
-php artisan db:wipe
-php artisan migrate
-php artisan serve
-php artisan route:list
+REMOVE TABLE DB: php artisan migrate:reset
+DELETE DB: php artisan db:wipe
+MIGRATION: php artisan migrate
+RUNE SERVER: php artisan serve
+ROUTE: php artisan route:list
+
 
 FACTORY: php artisan make:factory ProductsFactory
 SEEDER: php artisan db:seed
-php artisan make:controller php artisan make:controller API\\v1\\DepartementController --resource
-php artisan l5-swagger:generate
+        php artisan migrate --seed
+CONTROLLER: php artisan make:controller php artisan make:controller API\\v1\\DepartementController --resource
+SWAGGER: php artisan l5-swagger:generate

@@ -11,6 +11,8 @@ class Site extends Model
 
     public $timestamps = false;
 
+    protected $primaryKey = 'ids';
+
 
     public function departements(): BelongsTo {
         return $this->hasMany(Departement::class);

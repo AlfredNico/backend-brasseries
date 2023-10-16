@@ -50,17 +50,22 @@ class AuthController extends Controller {
     public function signUp(UserStoreRequest $rq) {
         try {
             $user = User::create([
-                'name' => $request->name,
-                'username' => $request->username,
-                'passwd' => bcrypt($request->password),
-                'is_activated' => isset($request->is_activated) ? $request->is_activated : false,
-                'cle_user' => isset($request->cle_user) ? $request->cle_user : null,
-                'departement_id' => isset($request->departement_id) ? $request->departement_id : null,
-                'usertype_id' => isset($request->usertype_id) ? $request->usertype_id : null,
+                'name' => $rq->name,
+                'username' => $rq->username,
+                'passwd' => bcrypt($rq->password),
+                'is_activated' => isset($rq->is_activated) ? $rq->is_activated : false,
+                'cle_user' => isset($rq->cle_user) ? $rq->cle_user : null,
+                'departement_id' => isset($rq->departement_id) ? $rq->departement_id : null,
+                'usertype_id' => isset($rq->usertype_id) ? $rq->usertype_id : null,
             ]);
             return new ApiSuccessResponse(
                 $user,
                 Response::HTTP_CREATED
+            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return new ApiErrorResponse(
+                $e,
+                'SQLSTATE: Foreign key violation'
             );
         } catch (\Throwable $th) {
             return new ApiErrorResponse(
@@ -102,7 +107,7 @@ class AuthController extends Controller {
             $user = User::where('username', $rq['username'])->first();
             if (!$user || !Hash::check($rq['password'], $user->passwd)) {
                 return new ApiSuccessResponse(
-                    $res,
+                    null,
                     401,
                     'Incorrect username or password.',
                     false
@@ -157,7 +162,7 @@ class AuthController extends Controller {
      */
     public function signOut(Request $rq) {
         try {
-            $validator = Validator::make($rq->all(),[
+            $validator = Validator::make($rq->all(), [
                 'ids' => 'required'
             ]);
 

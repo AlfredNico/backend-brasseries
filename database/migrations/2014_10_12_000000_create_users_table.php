@@ -23,10 +23,10 @@ return new class extends Migration
 
 
             $table->integer('usertype_id')->nullable()->unsigned();
-            $table->foreign('usertype_id')->references('ids')->on('users')->cascadeOnDelete();
+            $table->foreign('usertype_id')->references('ids')->on('userTypes')->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->integer('departement_id')->nullable()->unsigned();
-            $table->foreign('departement_id')->references('ids')->on('users')->cascadeOnDelete();
+            $table->foreign('departement_id')->references('ids')->on('departements')->cascadeOnDelete();
         });
     }
 

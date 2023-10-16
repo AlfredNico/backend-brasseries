@@ -2,13 +2,17 @@
 
 namespace App\Http\Requests;
 
+// use Illuminate\Foundation\Http\FormRequest;
+// use Illuminate\Contracts\Validation\Validator;
+// use Illuminate\Http\Exceptions\HttpResponseException;
+// use Illuminate\Http\Response;
+
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Response;
 
 
-class UserStoreRequest extends FormRequest
+
+
+class UserStoreRequest extends __BaseAPIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +26,18 @@ class UserStoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
-        $user_id = $this->user->ids ?? null;
+        // $user_id = $this->user->ids ?? null;
 
         return [
             'name' => 'required|string|max:50',
             'username' => 'required|unique:users',
             'is_activated' => 'boolean',
-            'password' => 'required'
+            'password' => 'required|min:6',
+            'cle_user' => 'string|integer',
+            'departement_id' => 'numeric|nullable',
+            'usertype_id' => 'numeric|nullable',
         ];
     }
 
@@ -50,12 +57,12 @@ class UserStoreRequest extends FormRequest
     }
 
 
-    public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()
-        ], Response::HTTP_NOT_ACCEPTABLE));
-    }
+    // public function failedValidation(Validator $validator) {
+    //     throw new HttpResponseException(response()->json([
+    //         'success'   => false,
+    //         'message'   => 'Validation errors',
+    //         'data'      => $validator->errors()
+    //     ], Response::HTTP_NOT_ACCEPTABLE));
+    // }
 
 }

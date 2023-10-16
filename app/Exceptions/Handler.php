@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Auth\AuthenticationException;
 // use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -30,6 +31,14 @@ class Handler extends ExceptionHandler
     {
         // $this->reportable(function (Throwable $e) {
         $this->renderable(function (NotFoundHttpException $e, $request) {
+            // if ($e instanceof QueryException) {
+            //     return response()->json([
+            //         'success' => false,
+            //          'message' => $e->errorInfo,
+            //         'message' => $e->getMessage(),
+            //         'data' => null
+            //     ], 404);
+            // }
             if ($request->is('api/*')) {
                 return response()->json([
                     'success' => false,

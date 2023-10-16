@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 
-class SingInRequest extends BaseAPIRequest {
+class SingInRequest extends __BaseAPIRequest
+{
 
     /**
      * Get the validation rules that apply to the request.
