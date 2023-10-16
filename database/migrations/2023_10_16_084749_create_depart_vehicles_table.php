@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('depart_vehicles', function (Blueprint $table) {
-            $table->id();
+            $table->increments("ids");
+            $table->string('commentaires');
+            $table->timestamp('dates')->useCurrent();
+
+            $table->integer('conducteur_id')->nullable()->unsigned();
+            $table->integer('attributeur')->nullable()->unsigned();
+
             $table->timestamps();
         });
     }

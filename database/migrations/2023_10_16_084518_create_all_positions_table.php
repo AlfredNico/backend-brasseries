@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('all_positions', function (Blueprint $table) {
-            $table->id();
+            $table->increments("ids");
+            $table->string('position_name');
+            $table->double('longs')->nullable();
+            $table->double('lats')->nullable();
+            $table->timestamp('dates')->useCurrent();
+            $table->string('odometer');
+
+            $table->integer('last_driver')->nullable()->unsigned();
+            $table->integer('vehicle_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

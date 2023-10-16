@@ -12,7 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('worktimes', function (Blueprint $table) {
-            $table->id();
+            $table->increments("ids");
+            $table->timestamp('date_init')->useCurrent();
+            $table->timestamp('date_end')->useCurrent();
+            $table->string('position_init');
+            $table->string('position_end');
+            $table->double('long_init')->nullable();
+            $table->double('lat_init')->nullable();
+            $table->double('long_end')->nullable();
+            $table->double('lat_end')->nullable();
+            $table->integer('vehicle_id')->nullable()->unsigned();
+            $table->integer('driver_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

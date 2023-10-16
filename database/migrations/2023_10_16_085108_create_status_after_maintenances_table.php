@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('status_after_maintenances', function (Blueprint $table) {
-            $table->id();
+            $table->increments("ids");
+            $table->string('name');
             $table->timestamps();
         });
     }

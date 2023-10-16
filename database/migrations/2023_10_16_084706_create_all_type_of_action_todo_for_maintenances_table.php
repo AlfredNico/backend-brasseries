@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('all_type_of_action_todo_for_maintenances', function (Blueprint $table) {
-            $table->id();
+            $table->increments("ids");
+            $table->string('name');
+
             $table->timestamps();
         });
     }
