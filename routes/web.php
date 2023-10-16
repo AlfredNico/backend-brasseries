@@ -16,6 +16,5 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
     // return view('welcome');
-    // return Redirect::to(url('/') . "/api/v1/swagger");
-    echo "data";
+    return Redirect::to(url('/') . "/api/v1/swagger");
 });
