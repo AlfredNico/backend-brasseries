@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('depart_vehicles', function (Blueprint $table) {
             $table->increments("ids");
-            $table->string('commentaires');
-            $table->timestamp('dates')->useCurrent();
-
             $table->integer('conducteur_id')->nullable()->unsigned();
-            $table->integer('attributeur')->nullable()->unsigned();
-
+            $table->integer('attributeur_id')->nullable()->unsigned();
+            $table->string('commentaires');
+            $table->timestamp('dates')->nullable();
             $table->timestamps();
+
+            $table->foreign('conducteur_id')->references('ids')->on('users')->cascadeOnDelete();
+            $table->foreign('attributeur_id')->references('ids')->on('users')->cascadeOnDelete();
         });
     }
 

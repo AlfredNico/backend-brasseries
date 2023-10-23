@@ -11,4 +11,8 @@ class ActionAfterMaintenance extends Model
 
     protected $primaryKey = 'ids';
 
+    public function status(): HasOne {
+        return $this->belongsTo(Status::class, 'status_maintenance_id');
+    }
+
 }

@@ -14,11 +14,13 @@ return new class extends Migration
     {
         Schema::create('action_after_maintenances', function (Blueprint $table) {
             $table->increments("ids");
-            $table->timestamp('dates')->useCurrent();
-
-            $table->integer('diagnostic_id')->nullable()->unsigned();
+            $table->timestamp('dates')->nullable();
+            $table->integer('status_diagnostic_id')->nullable()->unsigned();
             $table->integer('status_maintenance_id')->nullable()->unsigned();
             $table->timestamps();
+
+            $table->foreign('status_diagnostic_id')->references('ids')->on('statuses')->cascadeOnDelete();
+            $table->foreign('status_maintenance_id')->references('ids')->on('statuses')->cascadeOnDelete();
         });
     }
 

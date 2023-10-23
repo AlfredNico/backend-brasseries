@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'username',
         'passwd',
+        'dates',
         'is_activated',
         'cle_user',
         'departement_id',
@@ -35,7 +36,7 @@ class User extends Authenticatable
 
     protected $maps  = [
         'name' => 'nm',
-        'username' => 'usr',
+        'username' => 'usrnm',
         'is_activated' => 'is_act',
         'cle_user' => 'cle_usr',
         'dates' => 'dt',
@@ -44,9 +45,10 @@ class User extends Authenticatable
         'departement_id' => 'dp_id',
         'usertype_id' => 'usr_t_id',
     ];
+
     protected $appends = [
         'nm',
-        'usr',
+        'usrnm',
         'is_act',
         'cle_usr',
         'dt',
@@ -84,13 +86,6 @@ class User extends Authenticatable
         'passwd' => 'hashed',
     ];
 
-    public function userType(): HasOne {
-        return $this->belongsTo(UserTypes::class, 'usertype_id');
-    }
-
-    public function departement(): HasOne {
-        return $this->belongsTo(Departement::class, 'departement_id');
-    }
 
     /**
      * Create a new personal access token for the user.
@@ -114,14 +109,10 @@ class User extends Authenticatable
     }
 
 
-
-
-
-
     public function getNmAttribute() {
         return $this->attributes['name'];
     }
-    public function getUsrAttribute() {
+    public function getUsrnmAttribute() {
         return $this->attributes['username'];
     }
     public function getIsActAttribute() {
@@ -145,5 +136,20 @@ class User extends Authenticatable
     }
     public function getUsrTIdAttribute() {
         return $this->attributes['usertype_id'];
+    }
+
+    /**
+     * RELATION TABLE
+     */
+    public function userType(): HasOne {
+        return $this->belongsTo(UserTypes::class, 'usertype_id');
+    }
+
+    public function departement(): HasOne {
+        return $this->belongsTo(Departement::class, 'departement_id');
+    }
+
+    public function allPositions(): BelongsTo {
+        return $this->hasMany(AllPositions::class);
     }
 }

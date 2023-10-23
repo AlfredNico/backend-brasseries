@@ -11,4 +11,8 @@ class Diagnostic extends Model
 
     protected $primaryKey = 'ids';
 
+    public function status(): HasOne {
+        return $this->belongsTo(Status::class, 'status_disgnostic_id');
+    }
+
 }

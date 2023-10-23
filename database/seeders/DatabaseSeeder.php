@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+// use App\Models\Country;
 
 
 class DatabaseSeeder extends Seeder
@@ -20,10 +21,11 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(
-            [
-                UserSeeder::class
-            ]
-        );
+        $this->call([
+            SiteSeeder::class,
+            StatusSeeder::class,
+            DepartementSeeder::class,
+            UserSeeder::class
+        ]);
     }
 }

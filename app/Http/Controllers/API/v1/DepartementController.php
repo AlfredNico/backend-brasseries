@@ -3,65 +3,209 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
+use App\Repositories\DepartementRepository;
+use App\Http\Responses\ApiSuccessResponse;
+use App\Http\Responses\ApiErrorResponse;
+use Illuminate\Http\Response;
+use App\Http\Requests\departement\StoreDepartementRequest;
+use App\Models\Departement;
 
 
 class DepartementController extends Controller
 {
+    private DepartementRepository $departRepo;
+    public function __construct(DepartementRepository $departRepo = null) {
+        $this->departRepo = $departRepo;
+    }
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *    path="/departements",
+     *    operationId="indexDepartement",
+     *    tags={"CRUD Departement"},
+     *    summary="Get list of departement",
+     *    description="Get list of departement",
+     *    security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
      */
     public function index()
     {
-        //
+        try {
+            return new ApiSuccessResponse(
+                $this->departRepo->getAll(),
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new ApiErrorResponse($th);
+        }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @OA\Post(
+     *      path="/departements",
+     *      operationId="storeDepartement",
+     *      tags={"CRUD Departement"},
+     *      summary="Store Departement in DB",
+     *      description="Store departement in DB",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *           required={"name", "site_id"},
+     *            @OA\Property(property="site_id", type="integer", nullable=true),
+     *            @OA\Property(property="name", type="string", format="string", example=""),
+     *         ),
+     *    ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
      */
-    public function create()
+    public function store(StoreDepartementRequest $rq)
     {
-        //
+        try {
+            return new ApiSuccessResponse(
+                $this->departRepo->create($rq),
+                Response::HTTP_CREATED,
+                'Departement created successfully.'
+            );
+        } catch (\Illuminate\Database\QueryException $e) {
+            return new ApiErrorResponse(
+                $e,
+                'SQLSTATE: Foreign key violation'
+            );
+        } catch (\Throwable $th) {
+            return new ApiErrorResponse(
+                $th,
+                'An error occurred while trying to create the departement.'
+            );
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
+     /**
+     * @OA\Get(
+     *    path="/departements/{ids}",
+     *    operationId="showDepartement",
+     *    tags={"CRUD Departement"},
+     *    summary="Get Departement Detail",
+     *    description="Get departement Detail",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="ids", in="path", description="Id of departement", required=true,
+     *        @OA\Schema(type="integer")
+     *    ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *        )
+     *       )
+     *  )
      */
-    public function store(Request $request)
+    public function show(Departement $departement)
     {
-        //
+        try {
+            return new ApiSuccessResponse(
+                $departement,
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new ApiErrorResponse($th);
+        }
     }
 
-    /**
-     * Display the specified resource.
+
+      /**
+     * @OA\Put(
+     *     path="/departements/{ids}",
+     *     operationId="updateDepartement",
+     *     tags={"CRUD Departement"},
+     *     summary="Update departement in DB",
+     *     description="Update departement in DB",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(name="ids", in="path", description="Id of departement", required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *           required={"name", "site_id"},
+     *            @OA\Property(property="site_id", type="integer", nullable=true),
+     *            @OA\Property(property="name", type="string", format="string", example=""),
+     *         ),
+     *    ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
      */
-    public function show(string $id)
+    public function update(StoreDepartementRequest $rq, Departement $departement)
     {
-        //
+        try {
+            return new ApiSuccessResponse(
+                $this->departRepo->update($rq, $departement),
+                Response::HTTP_ACCEPTED,
+                'Departement updated successfully.'
+            );
+        } catch (\Throwable $th) {
+            return new ApiErrorResponse($th);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
+      /**
+     * @OA\Delete(
+     *    path="/departements/{ids}",
+     *    operationId="destroyDepartement",
+     *    tags={"CRUD Departement"},
+     *    summary="Delete Departement",
+     *    description="Delete departement",
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Parameter(name="ids", in="path", description="Id of departement", required=true,
+     *        @OA\Schema(type="integer")
+     *    ),
+     *    @OA\Response(
+     *         response=200,
+     *         description="Success",
+    *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *      )
+     *  )
      */
-    public function edit(string $id)
+    public function destroy(Departement $departement)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            return new ApiSuccessResponse(
+                $this->departRepo->delete($departement),
+                Response::HTTP_OK,
+                'Departement deleted successfully.'
+            );
+        } catch (\Throwable $th) {
+            return new ApiErrorResponse($th);
+        }
     }
 }

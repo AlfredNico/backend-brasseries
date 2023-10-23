@@ -11,4 +11,8 @@ class Maintenance extends Model
 
     protected $primaryKey = 'ids';
 
+    public function status(): HasOne {
+        return $this->belongsTo(Status::class, 'real_maintenance_status_id');
+    }
+
 }

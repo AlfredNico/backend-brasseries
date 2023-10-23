@@ -15,7 +15,7 @@ class ApiSuccessResponse implements Responsable {
      * @param  bool  $success
      */
     public function __construct(
-        private mixed $data,
+        private mixed $data = null,
         private ?int $code = Response::HTTP_INTERNAL_SERVER_ERROR,
         private ?String $message = 'Success',
         private ?bool $success = true,

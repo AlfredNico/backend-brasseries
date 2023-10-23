@@ -12,6 +12,5 @@ class DepartVehicleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
     }
 }

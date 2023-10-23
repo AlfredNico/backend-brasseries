@@ -13,19 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments("ids");
+            $table->integer('usertype_id')->nullable()->unsigned();
+            $table->integer('departement_id')->nullable()->unsigned();
             $table->string('name');
             $table->string('username')->unique();
             $table->boolean('is_activated')->default(0);
             $table->string('passwd');
-            $table->timestamp('dates')->useCurrent();
+            $table->timestamp('dates')->nullable();
+            // $table->timestamp('dates')->useCurrent();
             $table->string('cle_user')->nullable();
+
             $table->timestamps();
-
-
-            $table->integer('usertype_id')->nullable()->unsigned();
             $table->foreign('usertype_id')->references('ids')->on('user_types')->cascadeOnUpdate()->cascadeOnDelete();
-
-            $table->integer('departement_id')->nullable()->unsigned();
             $table->foreign('departement_id')->references('ids')->on('departements')->cascadeOnDelete();
         });
     }

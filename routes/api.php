@@ -2,8 +2,17 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\SiteController;
 use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\DepartementController;
+use App\Http\Controllers\API\v1\DiagnosticController;
+use App\Http\Controllers\API\v1\MaintenanceController;
+use App\Http\Controllers\API\v1\AllPositionController;
+use App\Http\Controllers\API\v1\PositionController;
+use App\Http\Controllers\API\v1\StatusController;
+use App\Http\Controllers\API\v1\VehicleController;
+use App\Http\Controllers\API\v1\WorktimeController;
 
 
 /*
@@ -29,10 +38,21 @@ Route::controller(AuthController::class)->group(function () {
 // });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource("sites", SiteController::class);
     Route::apiResource("users", UserController::class);
+    Route::apiResource("departements", DepartementController::class);
+    Route::apiResource("diagnostics", DiagnosticController::class);
+    Route::apiResource("maintenances", MaintenanceController::class);
+    Route::apiResource("all-positions", AllPositionController::class);
+    Route::apiResource("positions", PositionController::class);
+    Route::apiResource("status", StatusController::class);
+    Route::apiResource("vehicles", VehicleController::class);
+    Route::apiResource("worktimes", WorktimeController::class);
 });
 
 Route::get('list', [UserController::class, 'index']);
+
+
 
 Route::fallback(function (){
     abort(404, 'API resource not found');

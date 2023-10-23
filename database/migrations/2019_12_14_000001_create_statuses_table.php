@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_vehicles', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
+
             $table->increments("ids");
-            $table->string('name');
+            $table->string('name'); // name
+            $table->enum('type', ['M', 'AM','V','D'])->nullable(); // type_status [maintenances | after_maintenance | vehicle | diagnostic]
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status_vehicles');
+        Schema::dropIfExists('statuses');
     }
 };

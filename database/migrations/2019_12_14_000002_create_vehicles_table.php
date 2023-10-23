@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->increments("ids");
-            $table->string('name');
-
-            $table->integer('departement_id')->nullable()->unsigned();
-            $table->integer('status_id')->nullable()->unsigned();
-
+            $table->integer('departement_id')->nullable()->unsigned(); // departementid
+            $table->integer('status_vehicle_id')->nullable()->unsigned(); // status
+            $table->string('name'); // name
 
             $table->timestamps();
+            $table->foreign('departement_id')->references('ids')->on('departements')->cascadeOnDelete();
+            $table->foreign('status_vehicle_id')->references('ids')->on('statuses')->cascadeOnDelete();
         });
     }
 

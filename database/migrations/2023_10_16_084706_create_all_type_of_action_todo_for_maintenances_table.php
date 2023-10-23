@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('all_type_of_action_todo_for_maintenances', function (Blueprint $table) {
             $table->increments("ids");
             $table->string('name');
-
             $table->timestamps();
         });
     }

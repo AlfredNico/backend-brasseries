@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\user;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\__BaseAPIRequest;
 
 
 class SingInRequest extends __BaseAPIRequest
@@ -17,7 +18,7 @@ class SingInRequest extends __BaseAPIRequest
         return [
             'username' => 'required',
             'password' => 'required|string',
-            'is_activated' => 'boolean',
+            'remember_me' => 'boolean',
         ];
     }
 

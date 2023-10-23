@@ -13,7 +13,29 @@ class Site extends Model
 
     protected $primaryKey = 'ids';
 
+    protected $fillable = [
+        'name',
+    ];
 
+    protected $maps  = [
+        'name' => 'nm',
+    ];
+
+    protected $appends = [
+        'nm',
+    ];
+
+    protected $hidden = [
+        'name',
+    ];
+
+    public function getNmAttribute() {
+        return $this->attributes['name'];
+    }
+
+    /**
+     * RELATION TABLE
+     */
     public function departements(): BelongsTo {
         return $this->hasMany(Departement::class);
     }

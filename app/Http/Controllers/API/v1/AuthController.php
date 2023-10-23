@@ -10,13 +10,19 @@ use Carbon\Carbon;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Response;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\SingInRequest;
+use App\Http\Requests\user\StoreUserRequest;
+use App\Http\Requests\user\SingInRequest;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Repositories\UserRepository;
 
 
 class AuthController extends Controller {
+
+    private UserRepository $userRepo;
+    public function __construct(UserRepository $userRepo = null) {
+        $this->userRepo = $userRepo;
+    }
 
     /**
      * @OA\Post(
@@ -47,19 +53,10 @@ class AuthController extends Controller {
      *       )
      *  )
      */
-    public function signUp(UserStoreRequest $rq) {
+    public function signUp(StoreUserRequest $rq) {
         try {
-            $user = User::create([
-                'name' => $rq->name,
-                'username' => $rq->username,
-                'passwd' => bcrypt($rq->password),
-                'is_activated' => isset($rq->is_activated) ? $rq->is_activated : false,
-                'cle_user' => isset($rq->cle_user) ? $rq->cle_user : null,
-                'departement_id' => isset($rq->departement_id) ? $rq->departement_id : null,
-                'usertype_id' => isset($rq->usertype_id) ? $rq->usertype_id : null,
-            ]);
             return new ApiSuccessResponse(
-                $user,
+                $this->userRepo->create($rq),
                 Response::HTTP_CREATED
             );
         } catch (\Illuminate\Database\QueryException $e) {

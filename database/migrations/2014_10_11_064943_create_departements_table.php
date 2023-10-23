@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('departements', function (Blueprint $table) {
             $table->increments("ids");
+            $table->integer('site_id')->nullable()->unsigned();
             $table->string("name");
 
-            $table->integer('site_id')->nullable()->unsigned();
+            $table->timestamps();
             $table->foreign('site_id')->references('ids')->on('sites')->cascadeOnDelete();
         });
     }

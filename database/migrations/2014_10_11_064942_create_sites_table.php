@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sites', function (Blueprint $table) {
-            // $table->uuid("ids");
             $table->increments("ids");
             $table->string("name");
         });

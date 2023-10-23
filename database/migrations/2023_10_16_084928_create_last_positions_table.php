@@ -14,17 +14,17 @@ return new class extends Migration
     {
         Schema::create('last_positions', function (Blueprint $table) {
             $table->increments("ids");
+            $table->integer('driver_id')->nullable()->unsigned();
+            $table->integer('vehicle_id')->nullable()->unsigned();
             $table->string('position_name');
             $table->double('longs')->nullable();
             $table->double('lats')->nullable();
             $table->timestamp('dates')->useCurrent();
             $table->string('odometer');
 
-
-            $table->integer('driver_id')->nullable()->unsigned();
-            $table->integer('vehicle_id')->nullable()->unsigned();
-
             $table->timestamps();
+            $table->foreign('driver_id')->references('ids')->on('users')->cascadeOnDelete();
+            $table->foreign('vehicle_id')->references('ids')->on('vehicles')->cascadeOnDelete();
         });
     }
 

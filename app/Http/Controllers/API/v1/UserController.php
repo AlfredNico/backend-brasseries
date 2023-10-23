@@ -5,25 +5,25 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\user\StoreUserRequest;
+use App\Http\Requests\user\UpdateUserRequest;
 use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
 
-    private UserRepository $suerRepo;
-    public function __construct(UserRepository $suerRepo = null) {
-        $this->suerRepo = $suerRepo;
+    private UserRepository $userRepo;
+    public function __construct(UserRepository $userRepo = null) {
+        $this->userRepo = $userRepo;
     }
 
     /**
      * @OA\Get(
      *    path="/users",
-     *    operationId="index",
+     *    operationId="indexUser",
      *    tags={"CRUD User"},
      *    summary="Get list of users",
      *    description="Get list of users",
@@ -41,7 +41,7 @@ class UserController extends Controller
     public function index()  {
         try {
             return new ApiSuccessResponse(
-                $this->suerRepo->getAll(),
+                $this->userRepo->getAll(),
                 Response::HTTP_OK
             );
         } catch (\Throwable $th) {
@@ -57,6 +57,7 @@ class UserController extends Controller
      *      tags={"CRUD User"},
      *      summary="Store User in DB",
      *      description="Store user in DB",
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -79,11 +80,12 @@ class UserController extends Controller
      *       )
      *  )
      */
-    public function store(UserStoreRequest $rq) {
+    public function store(StoreUserRequest $rq) {
         try {
             return new ApiSuccessResponse(
-                $this->suerRepo->create($rq),
-                Response::HTTP_CREATED
+                $this->userRepo->create($rq),
+                Response::HTTP_CREATED,
+                'User created successfully.'
             );
         } catch (Throwable $ex) {
             return new ApiErrorResponse(
@@ -96,11 +98,12 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *    path="/articles/{ids}",
+     *    path="/users/{ids}",
      *    operationId="show",
      *    tags={"CRUD User"},
      *    summary="Get User Detail",
      *    description="Get user Detail",
+     *    security={{"bearerAuth":{}}},
      *    @OA\Parameter(name="ids", in="path", description="Id of user", required=true,
      *        @OA\Schema(type="integer")
      *    ),
@@ -135,9 +138,22 @@ class UserController extends Controller
      *     tags={"CRUD User"},
      *     summary="Update user in DB",
      *     description="Update user in DB",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(name="ids", in="path", description="Id of user", required=true,
      *         @OA\Schema(type="integer")
      *     ),
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+      *           required={"name","username", "password"},
+     *            @OA\Property(property="name", type="string", format="string", example=""),
+     *            @OA\Property(property="username", type="string", format="string", example=""),
+     *            @OA\Property(property="password", type="string", format="password", example=""),
+     *            @OA\Property(property="cle_user", type="string", format="string", example=""),
+     *            @OA\Property(property="departement_id", type="string", example=""),
+     *            @OA\Property(property="usertype_id", type="string", example=""),
+     *         ),
+     *    ),
      *     @OA\Response(
      *          response=200, description="Success",
      *          @OA\JsonContent(
@@ -148,12 +164,13 @@ class UserController extends Controller
      *       )
      *  )
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $rq, User $user)
     {
         try {
             return new ApiSuccessResponse(
-                $user,
-                Response::HTTP_OK
+                $this->userRepo->update($rq, $user),
+                Response::HTTP_ACCEPTED,
+                'User updated successfully.'
             );
         } catch (\Throwable $th) {
             return new ApiErrorResponse($th);
@@ -167,6 +184,7 @@ class UserController extends Controller
      *    tags={"CRUD User"},
      *    summary="Delete User",
      *    description="Delete user",
+     *    security={{"bearerAuth":{}}},
      *    @OA\Parameter(name="ids", in="path", description="Id of user", required=true,
      *        @OA\Schema(type="integer")
      *    ),
@@ -186,8 +204,10 @@ class UserController extends Controller
     {
         try {
             return new ApiSuccessResponse(
-                $user,
-                Response::HTTP_OK
+                $this->userRepo->delete($user),
+                Response::HTTP_OK,
+                // Response::HTTP_NO_CONTENT,
+                'User deleted successfully.'
             );
         } catch (\Throwable $th) {
             return new ApiErrorResponse($th);

@@ -15,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
         //
 
 		$this->app->bind(
-			\App\Interfaces\CRUDRepositoryInterface::class,
-			\App\Repositories\CRUDRepository::class
+			\App\Interfaces\Crud_Interface::class,
+			\App\Repositories\UserRepository::class
 		);
     }
 
