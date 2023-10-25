@@ -464,12 +464,12 @@
                                     "username": {
                                         "type": "string",
                                         "format": "string",
-                                        "example": "mcdermott.hobart@example.org"
+                                        "example": ""
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "123456"
+                                        "example": ""
                                     },
                                     "remember_me": {
                                         "type": "boolean"
@@ -527,6 +527,127 @@
                                 "properties": {
                                     "ids": {
                                         "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "format": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reset-pass": {
+            "post": {
+                "tags": [
+                    "AUTH Account"
+                ],
+                "summary": "Reset user password",
+                "description": "Reset user password",
+                "operationId": "resetPasswd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "remember_me"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "integer",
+                                            "example": "200"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "format": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/forgot-pass": {
+            "post": {
+                "tags": [
+                    "AUTH Account"
+                ],
+                "summary": "forgot user passwrod",
+                "description": "forgot user passwrod",
+                "operationId": "forgotPasswd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "remember_token",
+                                    "password",
+                                    "c_password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": ""
+                                    },
+                                    "c_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": ""
                                     }
                                 },
                                 "type": "object"

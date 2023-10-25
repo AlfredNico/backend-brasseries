@@ -30,6 +30,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('sign-in', 'signIn');
     Route::post('sign-up', 'signUp');
     Route::post('sign-out', 'signOut');
+    Route::post('reset-pass', 'resetPasswd');
+    Route::post('forgot-pass', 'forgotPasswd');
 });
 
 // Route::prefix('v1/persons')

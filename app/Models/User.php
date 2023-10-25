@@ -73,7 +73,9 @@ class User extends Authenticatable
         'usertype_id',
         'created_at',
         'updated_at',
-        'dates'
+        'dates',
+        'remember_token',
+        'expires_at_token',
     ];
 
     /**

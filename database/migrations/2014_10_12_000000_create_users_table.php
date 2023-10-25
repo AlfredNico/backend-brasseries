@@ -22,6 +22,9 @@ return new class extends Migration
             $table->timestamp('dates')->nullable();
             // $table->timestamp('dates')->useCurrent();
             $table->string('cle_user')->nullable();
+            $table->string('remember_token')->nullable();
+            $table->timestamp('expires_at_token')->nullable();
+
 
             $table->timestamps();
             $table->foreign('usertype_id')->references('ids')->on('user_types')->cascadeOnUpdate()->cascadeOnDelete();

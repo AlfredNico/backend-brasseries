@@ -11,10 +11,13 @@ use App\Http\Responses\ApiSuccessResponse;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Response;
 use App\Http\Requests\user\StoreUserRequest;
+use App\Http\Requests\user\FogrotPasswdRequest;
 use App\Http\Requests\user\SingInRequest;
+use App\Http\Requests\user\ResetPasswdRequest;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Str;
 
 
 class AuthController extends Controller {
@@ -84,8 +87,8 @@ class AuthController extends Controller {
      *         required=true,
      *         @OA\JsonContent(
      *            required={"username", "password", "remember_me"},
-     *            @OA\Property(property="username", type="string", format="string", example="mcdermott.hobart@example.org"),
-     *            @OA\Property(property="password", type="string", format="password", example="123456"),
+     *            @OA\Property(property="username", type="string", format="string", example=""),
+     *            @OA\Property(property="password", type="string", format="password", example=""),
      *            @OA\Property(property="remember_me", type="boolean"),
      *         ),
      *      ),
@@ -105,7 +108,7 @@ class AuthController extends Controller {
             if (!$user || !Hash::check($rq['password'], $user->passwd)) {
                 return new ApiSuccessResponse(
                     null,
-                    401,
+                    Response::HTTP_UNAUTHORIZED,
                     'Incorrect username or password.',
                     false
                 );
@@ -166,7 +169,7 @@ class AuthController extends Controller {
             if($validator->fails()){
                 return new ApiSuccessResponse(
                     null,
-                    Response::HTTP_NOT_FOUND ,
+                    Response::HTTP_NOT_FOUND,
                     'id user is required not found !',
                     false
                 );
@@ -180,11 +183,118 @@ class AuthController extends Controller {
                 'Logout success !'
             ) :  new ApiSuccessResponse(
                 null,
-                Response::HTTP_NOT_FOUND ,
+                Response::HTTP_NOT_FOUND,
                 'user not found !',
                 false
             );
         } catch (\Throwable $th) {
+            return new ApiErrorResponse(
+                $th,
+                'An error occurred while trying to logout an user.'
+            );
+        }
+    }
+
+
+    /**
+     * @OA\Post(
+     *      path="/reset-pass",
+     *      operationId="resetPasswd",
+     *      tags={"AUTH Account"},
+     *      summary="Reset user password",
+     *      description="Reset user password",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            required={"username", "password", "remember_me"},
+     *            @OA\Property(property="username", type="string", format="string", example=""),
+     *         ),
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
+     */
+    public function resetPasswd(ResetPasswdRequest $rq)
+    {
+        try {
+            $user = User::where('username', $rq['username'])->first();
+            if (!$user) {
+                return new ApiSuccessResponse(
+                    null,
+                    Response::HTTP_NOT_FOUND,
+                    'Username not found.',
+                    false
+                );
+            }
+
+            $user['remember_token'] = Str::random(30);
+            $user['expires_at_token'] = Carbon::now()->addHours(2);
+            $user->save();
+
+            return new ApiSuccessResponse(
+                $user,
+                Response::HTTP_OK,
+            );
+
+        }  catch (\Throwable $th) {
+            return new ApiErrorResponse(
+                $th,
+                'An error occurred while trying to logout an user.'
+            );
+        }
+    }
+
+
+       /**
+     * @OA\Post(
+     *      path="/forgot-pass",
+     *      operationId="forgotPasswd",
+     *      tags={"AUTH Account"},
+     *      summary="forgot user passwrod",
+     *      description="forgot user passwrod",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *            required={"remember_token", "password", "c_password"},
+     *            @OA\Property(property="username", type="string", format="password", example=""),
+     *            @OA\Property(property="c_password", type="string", format="password", example=""),
+     *         ),
+     *      ),
+     *     @OA\Response(
+     *          response=200, description="Success",
+     *          @OA\JsonContent(
+     *             @OA\Property(property="success", type="integer", example="200"),
+     *             @OA\Property(property="message",type="string", format="string", example="Success"),
+     *             @OA\Property(property="data",type="object")
+     *          )
+     *       )
+     *  )
+     */
+    public function forgotPasswd(FogrotPasswdRequest $rq)
+    {
+        try {
+            $user = User::where('remember_token', $rq['remember_token'])->first();
+            if (!$user) {
+                return new ApiSuccessResponse(
+                    null,
+                    Response::HTTP_NOT_FOUND,
+                    'User token not found.',
+                    false
+                );
+            }
+            return new ApiSuccessResponse(
+                $user,
+                Response::HTTP_OK,
+                'Incorrect username.',
+                false
+            );
+        }  catch (\Throwable $th) {
             return new ApiErrorResponse(
                 $th,
                 'An error occurred while trying to logout an user.'
