@@ -16,9 +16,11 @@ class FogrotPasswdRequest extends __BaseAPIRequest
      */
     public function rules(): array {
         return [
-            'remember_token' => 'required|string',
-            'passwrd' => 'required|string|min:6',
-            'c_password' => 'required|required_with:password|same:password|min:6'
+            'remember_tkn' => 'required|string',
+            'passwd' => 'required|string|min:6|required_with:c_passwd|same:c_passwd',
+            'c_passwd' => 'min:6'
+            // 'passwd' => 'required|string|min:6',
+            // 'c_passwd' => 'required|required_with:password|same:password|min:6'
         ];
     }
 
@@ -30,9 +32,11 @@ class FogrotPasswdRequest extends __BaseAPIRequest
      */
     public function messages() {
         return [
-            'remember_token.required' => 'Username is required!',
-            'passwrd.required' => 'Username is required!',
-            'c_password.required' => 'Username is required!',
+            'remember_tkn.required' => 'Rember token is required!',
+            'passwd.required' => 'Password is required!',
+            'c_passwd.required' => 'Password confirmation is required!',
+            'passwd.same' => 'Password confirmation is required!',
+            // 'c_passwd.same' => 'The password confirmation does not match !',
         ];
     }
 }

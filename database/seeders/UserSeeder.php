@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\UserTypes;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 
 class UserSeeder extends Seeder
@@ -28,7 +29,7 @@ class UserSeeder extends Seeder
             'nm' => 'Alfred Nico',
             'usm' => 'alfred.andrianjatovo@camtrack.mg',
         ], [
-            'nm' => 'user test',
+            'nm' => 'User Test',
             'usm' => 'user.test@camtrack.net',
         ]
     ];
@@ -38,6 +39,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create();
+
         foreach (self::$users as $usr) {
             User::create([
                 'name' => $usr['nm'],
@@ -45,7 +48,8 @@ class UserSeeder extends Seeder
                 'passwd' => bcrypt('123456'),
                 'dates' => null,
                 'is_activated' => true,
-                'cle_user' => strtoupper(Str::random(5)),
+                // 'cle_user' => strtoupper(Str::random(5)),
+                'cle_user' => $faker->numberBetween(100,500),
                 'departement_id' => null,
                 'usertype_id' => UserTypes::where('name', 'admin')->first()->ids,
             ]);
