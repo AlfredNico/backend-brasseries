@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         ], [
             'nm' => 'User Test',
             'usm' => 'user.test@camtrack.net',
-        ]
+        ]   
     ];
 
     /**
