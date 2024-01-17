@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
             //         'data' => null
             //     ], 404);
             // }
-            if ($request->is('api/*')) {
+            if ($request->is('/brasseries/api/*')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Resource not found.',

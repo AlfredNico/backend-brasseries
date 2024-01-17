@@ -18,3 +18,7 @@ Route::get('/', function () {
     // return view('welcome');
     return Redirect::to(url('/') . "/api/v1/swagger");
 });
+
+// Route::get('/brasseries', function () {
+//     return Redirect::to(url('/') . "/brasseries/api/v1/swagger");
+// });
