@@ -13,6 +13,8 @@ use App\Http\Controllers\API\v1\PositionController;
 use App\Http\Controllers\API\v1\StatusController;
 use App\Http\Controllers\API\v1\VehicleController;
 use App\Http\Controllers\API\v1\WorktimeController;
+use App\Http\Controllers\API\v1\SendMailController;
+
 
 
 /*
@@ -32,6 +34,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('sign-out', 'signOut');
     Route::post('reset-pass', 'resetPasswd');
     Route::post('forgot-pass', 'forgotPasswd');
+    Route::get('send-mail', [SendMailController::class, 'testBody']);
+    Route::get('send-mail/{token}', [SendMailController::class, 'testBody']);
+    Route::post('send-mail', [SendMailController::class, 'index']);
+
 });
 
 // Route::prefix('v1/persons')

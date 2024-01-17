@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Str;
+use Mail;
+use App\Mail\SampleMail;
 
 
 class AuthController extends Controller {
@@ -233,12 +235,19 @@ class AuthController extends Controller {
                 );
             }
 
-            $user['remember_token'] = Str::random(30);
-            $user['expires_at_token'] = Carbon::now()->addHours(2);
+            $userToken = Str::random(35);
+            $user['expires_at_token'] = Carbon::now()->addHours(3);
+            $user['remember_token'] = $userToken;
             $user->save();
 
+            $content = [
+                'usrToken' => $userToken
+            ];
+
+            Mail::to($rq['username'])->send(new SampleMail($content)); /** SEND MAIL TO RESET USER PASS */
+
             return new ApiSuccessResponse(
-                $user,
+                ['rememner_tkn' => $user['remember_token']],
                 Response::HTTP_OK,
             );
 
@@ -279,7 +288,7 @@ class AuthController extends Controller {
     public function forgotPasswd(FogrotPasswdRequest $rq)
     {
         try {
-            $user = User::where('remember_token', $rq['remember_token'])->first();
+            $user = User::where('remember_token', $rq['remember_tkn'])->first();
             if (!$user) {
                 return new ApiSuccessResponse(
                     null,
@@ -288,10 +297,31 @@ class AuthController extends Controller {
                     false
                 );
             }
+
+            /** ->subHours(3)   expires_at_token   */
+            $user = User::where('remember_token', $rq['remember_tkn'])
+                        ->whereDay('created_at', '>=', date('d'))
+                        ->whereMonth('created_at', '>=', date('m'))
+                        ->whereYear('created_at', '>=', date('Y'))
+                        ->whereTime('created_at', '>=', date('H:m:s'))->first();
+                        // ->whereDate('created_at', '>=', Carbon::now()->subHours(3) )->first();
+            // $user = User::where('remember_token', $rq['remember_tkn'])->whereRaw("expires_at_token > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')", Carbon::now())->first();
+            if (!$user) {
+                return new ApiSuccessResponse(
+                    null,
+                    Response::HTTP_NOT_FOUND,
+                    'User token is expired, please try again.',
+                    false
+                );
+            }
+            $user['expires_at_token'] = null;
+            $user['remember_token'] = null;
+            $user['passwd'] = bcrypt($rq['passwd']);
+            $user->save();
             return new ApiSuccessResponse(
                 $user,
                 Response::HTTP_OK,
-                'Incorrect username.',
+                'User password reset successfully.',
                 false
             );
         }  catch (\Throwable $th) {
